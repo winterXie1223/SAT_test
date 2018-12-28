@@ -1,0 +1,28 @@
+digraph "int test(int,int)" {
+    label="int test(int,int)";
+    node [shape=box];
+    "0" [style=filled,fillcolor=gray,label="r0 := @this",];
+    "1" [label="i0 := @parameter0",];
+    "0"->"1";
+    "2" [label="i1 := @parameter1",];
+    "1"->"2";
+    "3" [label="if i0 <= 0 goto label0",];
+    "2"->"3";
+    "4" [label="i3 = i0 + 10",];
+    "3"->"4";
+    "7" [label="label0: $i4 = i0 / 5",];
+    "3"->"7";
+    "5" [label="i2 = i3 / 5",];
+    "4"->"5";
+    "6" [label="goto label1",];
+    "5"->"6";
+    "10" [label="label1: i6 = i2 + i1",];
+    "6"->"10";
+    "8" [label="i2 = $i4 + 2",];
+    "7"->"8";
+    "9" [label="i5 = i0 + 10",];
+    "8"->"9";
+    "9"->"10";
+    "11" [style=filled,fillcolor=lightgray,label="return i6",];
+    "10"->"11";
+}
