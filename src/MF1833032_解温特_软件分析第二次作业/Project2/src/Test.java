@@ -26,6 +26,6 @@ public class Test {
 		traverse1.printAllPaths();
 		SymbolicExecution execution = new SymbolicExecution();
 		execution.setPaths(traverse1.getPaths());
-		//execution.execute();
+		execution.execute();
 	}
 }

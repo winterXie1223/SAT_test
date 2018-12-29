@@ -26,7 +26,7 @@ public class SymbolicExecution {
 		List<String> result = new ArrayList<>();
 		for (List<Unit> path : paths){
 			Map<String, Node> midResult = new HashMap<>();
-			for (int i = 1; i <= path.size(); i++){
+			for (int i = 0; i < path.size(); i++){
 				parse(path.get(i), midResult, path, result);
 			}
 		}
@@ -51,6 +51,29 @@ public class SymbolicExecution {
 			node.setType(type);
 			midResult.put(parameter, node);
 		}
+		else if (unit.toString().contains(">=")){
+			List<String> unitChar =  java.util.Arrays.asList(unit.toString().split(" "));
+			String parameter = unitChar.get(unitChar.indexOf(">=") - 1);
+			String value = unitChar.get(unitChar.indexOf(">=") + 1);
+			int index = path.indexOf(unit);
+			Unit nextUnit = path.get(index + 1);
+			//System.out.println(nextUnit);
+			List<String> nextUnitChar =  java.util.Arrays.asList(nextUnit.toString().split(" "));
+			if (nextUnitChar.get(0).equals("nop")){
+				Node node = new Node();
+				String parameterValue = midResult.get(parameter).getValue();
+				node.setValue(parameterValue + ">=" + value);
+				node.setType("constraint");
+				midResult.put(parameterValue, node);
+			}else if (nextUnitChar.get(0).equals("goto")){
+				//System.out.println(unitChar);
+				Node node = new Node();
+				String parameterValue = midResult.get(parameter).getValue();
+				node.setValue(parameterValue + "<" + value);
+				node.setType("constraint");
+				midResult.put(parameterValue, node);
+			}
+		}
 		else if (unit.toString().contains(">")){
 			List<String> unitChar =  java.util.Arrays.asList(unit.toString().split(" "));
 			String parameter = unitChar.get(unitChar.indexOf(">") - 1);
@@ -70,6 +93,27 @@ public class SymbolicExecution {
 				Node node = new Node();
 				String parameterValue = midResult.get(parameter).getValue();
 				node.setValue(parameterValue + "<=" + value);
+				node.setType("constraint");
+				midResult.put(parameterValue, node);
+			}
+		}
+		else if (unit.toString().contains("<=")){
+			List<String> unitChar =  java.util.Arrays.asList(unit.toString().split(" "));
+			String parameter = unitChar.get(unitChar.indexOf("<=") - 1);
+			String value = unitChar.get(unitChar.indexOf("<=") + 1);
+			int index = path.indexOf(unit);
+			Unit nextUnit = path.get(index + 1);
+			List<String> nextUnitChar =  java.util.Arrays.asList(nextUnit.toString().split(" "));
+			if (nextUnitChar.get(0).equals("nop")){
+				Node node = new Node();
+				String parameterValue = midResult.get(parameter).getValue();
+				node.setValue(parameterValue + "<=" + value);
+				node.setType("constraint");
+				midResult.put(parameterValue, node);
+			}else if (nextUnitChar.get(0).equals("goto")){
+				Node node = new Node();
+				String parameterValue = midResult.get(parameter).getValue();
+				node.setValue(parameterValue + ">" + value);
 				node.setType("constraint");
 				midResult.put(parameterValue, node);
 			}
